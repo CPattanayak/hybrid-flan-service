@@ -1,0 +1,60 @@
+
+{"text":"User: Weather in Bangalore","Output":"{\"intent\":\"weather\",\"location\":\"Bangalore\"}"}
+{"text":"User: Is it raining in Chennai today?","Output":"{\"intent\":\"weather\",\"location\":\"Chennai\"}"}
+{"text":"User: Temperature forecast for Delhi tomorrow","Output":"{\"intent\":\"weather\",\"location\":\"Delhi\"}"}
+{"text":"User: Show me the weather in Mumbai","Output":"{\"intent\":\"weather\",\"location\":\"Mumbai\"}"}
+{"text":"User: How hot is it in Kolkata?","Output":"{\"intent\":\"weather\",\"location\":\"Kolkata\"}"}
+{"text":"User: Check the forecast for Hyderabad","Output":"{\"intent\":\"weather\",\"location\":\"Hyderabad\"}"}
+{"text":"User: Tell me the weather in Pune","Output":"{\"intent\":\"weather\",\"location\":\"Pune\"}"}
+{"text":"User: Is it snowing in Shimla?","Output":"{\"intent\":\"weather\",\"location\":\"Shimla\"}"}
+{"text":"User: Weather update for Goa","Output":"{\"intent\":\"weather\",\"location\":\"Goa\"}"}
+{"text":"User: Rain prediction for Kerala","Output":"{\"intent\":\"weather\",\"location\":\"Kerala\"}"}
+{"text":"User: Forecast for Jaipur","Output":"{\"intent\":\"weather\",\"location\":\"Jaipur\"}"}
+{"text":"User: Weather in Lucknow","Output":"{\"intent\":\"weather\",\"location\":\"Lucknow\"}"}
+{"text":"User: Is it cloudy in Patna?","Output":"{\"intent\":\"weather\",\"location\":\"Patna\"}"}
+{"text":"User: Temperature in Ranchi","Output":"{\"intent\":\"weather\",\"location\":\"Ranchi\"}"}
+{"text":"User: Humidity in Surat","Output":"{\"intent\":\"weather\",\"location\":\"Surat\"}"}
+{"text":"User: Weather in Chandigarh","Output":"{\"intent\":\"weather\",\"location\":\"Chandigarh\"}"}
+{"text":"User: Forecast for Nagpur","Output":"{\"intent\":\"weather\",\"location\":\"Nagpur\"}"}
+{"text":"User: Is it windy in Bhopal?","Output":"{\"intent\":\"weather\",\"location\":\"Bhopal\"}"}
+{"text":"User: Weather in Indore","Output":"{\"intent\":\"weather\",\"location\":\"Indore\"}"}
+{"text":"User: Rainfall in Assam","Output":"{\"intent\":\"weather\",\"location\":\"Assam\"}"}
+		 
+{"text":"User: Add 45 and 55","Output":"{\"intent\":\"calculator\",\"expression\":\"45+55\"}"}
+{"text":"User: What is 12 times 9?","Output":"{\"intent\":\"calculator\",\"expression\":\"12*9\"}"}
+{"text":"User: Divide 144 by 12","Output":"{\"intent\":\"calculator\",\"expression\":\"144/12\"}"}
+{"text":"User: Calculate 200 minus 75","Output":"{\"intent\":\"calculator\",\"expression\":\"200-75\"}"}
+{"text":"User: Square root of 81","Output":"{\"intent\":\"calculator\",\"expression\":\"sqrt(81)\"}"}
+{"text":"User: Multiply 23 and 7","Output":"{\"intent\":\"calculator\",\"expression\":\"23*7\"}"}
+{"text":"User: What is 100 divided by 4?","Output":"{\"intent\":\"calculator\",\"expression\":\"100/4\"}"}
+{"text":"User: Add 999 and 1","Output":"{\"intent\":\"calculator\",\"expression\":\"999+1\"}"}
+{"text":"User: Subtract 50 from 120","Output":"{\"intent\":\"calculator\",\"expression\":\"120-50\"}"}
+{"text":"User: Evaluate 15*15","Output":"{\"intent\":\"calculator\",\"expression\":\"15*15\"}"}
+{"text":"User: What is 2 to the power of 8?","Output":"{\"intent\":\"calculator\",\"expression\":\"2**8\"}"}
+{"text":"User: Find 10% of 500","Output":"{\"intent\":\"calculator\",\"expression\":\"500*0.1\"}"}
+{"text":"User: Add 123 and 456","Output":"{\"intent\":\"calculator\",\"expression\":\"123+456\"}"}
+{"text":"User: Multiply 45 by 11","Output":"{\"intent\":\"calculator\",\"expression\":\"45*11\"}"}
+{"text":"User: Divide 1000 by 25","Output":"{\"intent\":\"calculator\",\"expression\":\"1000/25\"}"}
+{"text":"User: Subtract 300 from 1000","Output":"{\"intent\":\"calculator\",\"expression\":\"1000-300\"}"}
+{"text":"User: Square of 25","Output":"{\"intent\":\"calculator\",\"expression\":\"25**2\"}"}
+{"text":"User: Cube of 6","Output":"{\"intent\":\"calculator\",\"expression\":\"6**3\"}"}
+		 
+{"text":"User: Explain LangGraph","Output":"{\"intent\":\"faq\",\"query\":\"Explain LangGraph\"}"}
+{"text":"User: What is HuggingFace?","Output":"{\"intent\":\"faq\",\"query\":\"What is HuggingFace?\"}"}
+{"text":"User: Tell me about Modal","Output":"{\"intent\":\"faq\",\"query\":\"Tell me about Modal\"}"}
+{"text":"User: Define transformers library","Output":"{\"intent\":\"faq\",\"query\":\"Define transformers library\"}"}
+{"text":"User: What is LoRA fine-tuning?","Output":"{\"intent\":\"faq\",\"query\":\"What is LoRA fine-tuning?\"}"}
+{"text":"User: Explain FastAPI","Output":"{\"intent\":\"faq\",\"query\":\"Explain FastAPI\"}"}
+{"text":"User: What is PyTorch?","Output":"{\"intent\":\"faq\",\"query\":\"What is PyTorch?\"}"}
+{"text":"User: Describe DistilBERT","Output":"{\"intent\":\"faq\",\"query\":\"Describe DistilBERT\"}"}
+{"text":"User: What is Qwen model?","Output":"{\"intent\":\"faq\",\"query\":\"What is Qwen model?\"}"}
+{"text":"User: Explain LangChain","Output":"{\"intent\":\"faq\",\"query\":\"Explain LangChain\"}"}
+{"text":"User: What is machine learning?","Output":"{\"intent\":\"faq\",\"query\":\"What is machine learning?\"}"}
+{"text":"User: Define deep learning","Output":"{\"intent\":\"faq\",\"query\":\"Define deep learning\"}"}
+{"text":"User: Explain neural networks","Output":"{\"intent\":\"faq\",\"query\":\"Explain neural networks\"}"}
+{"text":"User: What is reinforcement learning?","Output":"{\"intent\":\"faq\",\"query\":\"What is reinforcement learning?\"}"}
+{"text":"User: Describe supervised learning","Output":"{\"intent\":\"faq\",\"query\":\"Describe supervised learning\"}"}
+{"text":"User: Explain unsupervised learning","Output":"{\"intent\":\"faq\",\"query\":\"Explain unsupervised learning\"}"}
+{"text":"User: What is transfer learning?","Output":"{\"intent\":\"faq\",\"query\":\"What is transfer learning?\"}"}
+{"text":"User: Tell me about GPT models","Output":"{\"intent\":\"faq\",\"query\":\"Tell me about GPT models\"}"}
+{"text":"User: Explain embeddings","Output":"{\"intent\":\"faq\",\"query\":\"Explain embeddings\"}"}

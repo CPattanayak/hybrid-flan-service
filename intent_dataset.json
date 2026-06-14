@@ -1,0 +1,57 @@
+{"text":"Weather in Bangalore","label":0}
+{"text":"Is it raining in Chennai today?","label":0}
+{"text":"Temperature forecast for Delhi tomorrow","label":0}
+{"text":"Show me the weather in Mumbai","label":0}
+{"text":"How hot is it in Kolkata?","label":0}
+{"text":"Check the forecast for Hyderabad","label":0}
+{"text":"Tell me the weather in Pune","label":0}
+{"text":"Is it snowing in Shimla?","label":0}
+{"text":"Weather update for Goa","label":0}
+{"text":"Rain prediction for Kerala","label":0}
+{"text":"Forecast for Jaipur","label":0}
+{"text":"Weather in Lucknow","label":0}
+{"text":"Is it cloudy in Patna?","label":0}
+{"text":"Temperature in Ranchi","label":0}
+{"text":"Humidity in Surat","label":0}
+{"text":"Weather in Chandigarh","label":0}
+{"text":"Forecast for Nagpur","label":0}
+{"text":"Is it windy in Bhopal?","label":0}
+{"text":"Weather in Indore","label":0}
+{"text":"Rainfall in Assam","label":0}
+{"text":"Add 45 and 55","label":1}
+{"text":"What is 12 times 9?","label":1}
+{"text":"Divide 144 by 12","label":1}
+{"text":"Calculate 200 minus 75","label":1}
+{"text":"Square root of 81","label":1}
+{"text":"Multiply 23 and 7","label":1}
+{"text":"What is 100 divided by 4?","label":1}
+{"text":"Add 999 and 1","label":1}
+{"text":"Subtract 50 from 120","label":1}
+{"text":"Evaluate 15*15","label":1}
+{"text":"What is 2 to the power of 8?","label":1}
+{"text":"Find 10% of 500","label":1}
+{"text":"Add 123 and 456","label":1}
+{"text":"Multiply 45 by 11","label":1}
+{"text":"Divide 1000 by 25","label":1}
+{"text":"Subtract 300 from 1000","label":1}
+{"text":"Square of 25","label":1}
+{"text":"Cube of 6","label":1}
+{"text":"Explain LangGraph","label":2}
+{"text":"What is HuggingFace?","label":2}
+{"text":"Tell me about Modal","label":2}
+{"text":"Define transformers library","label":2}
+{"text":"What is LoRA fine-tuning?","label":2}
+{"text":"Explain FastAPI","label":2}
+{"text":"What is PyTorch?","label":2}
+{"text":"Describe DistilBERT","label":2}
+{"text":"What is Qwen model?","label":2}
+{"text":"Explain LangChain","label":2}
+{"text":"What is machine learning?","label":2}
+{"text":"Define deep learning","label":2}
+{"text":"Explain neural networks","label":2}
+{"text":"What is reinforcement learning?","label":2}
+{"text":"Describe supervised learning","label":2}
+{"text":"Explain unsupervised learning","label":2}
+{"text":"What is transfer learning?","label":2}
+{"text":"Tell me about GPT models","label":2}
+{"text":"Explain embeddings","label":2}

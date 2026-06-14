@@ -1,0 +1,3 @@
+{"text":"calculate 4+5","entities":[{"text":"4+5","label":"expression"}]}
+{"text":"what is 12 times 9","entities":[{"text":"12*9","label":"expression"}]}
+{"text":"divide 144 by 12","entities":[{"text":"144/12","label":"expression"}]}
