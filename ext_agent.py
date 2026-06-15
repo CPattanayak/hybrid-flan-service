@@ -1,35 +1,45 @@
-import os, json, random, re
+import os, json, random, re, torch
 import modal
 from fastapi import FastAPI
 from pydantic import BaseModel
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, Seq2SeqTrainer, Seq2SeqTrainingArguments
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig, TrainingArguments
 from datasets import load_dataset
-from peft import LoraConfig, get_peft_model, TaskType
+from trl import SFTTrainer
+from peft import LoraConfig, get_peft_model, TaskType, PeftModel, prepare_model_for_kbit_training
 
 # -----------------------------
 # Modal Setup
 # -----------------------------
-app = modal.App("extractor-agent")
-vol = modal.Volume.from_name("extractor-vol", create_if_missing=True)
+app = modal.App("qwen-extractor")
+vol = modal.Volume.from_name("qwen-vol", create_if_missing=True)
 
-# Common image with all deps
 common_image = (
     modal.Image.debian_slim()
     .pip_install(
-        "fastapi","uvicorn","transformers","datasets","torch","accelerate","pydantic","peft"
+        "fastapi",
+        "uvicorn",
+        "transformers>=4.39.0",
+        "datasets",
+        "torch",
+        "accelerate",
+        "pydantic",
+        "trl",       # pin stable TRL
+        "peft",
+        "bitsandbytes",
+        "sentencepiece",
+        "tiktoken"
     )
 )
 
 # -----------------------------
 # Config
 # -----------------------------
-MODEL_NAME = "google/flan-t5-small"
 MODEL_DIR = "/vol/model"
 DATASET_FILE = "/vol/dataset.jsonl"
-NUM_ENTRIES = 10000   # larger dataset for stronger training
+NUM_ENTRIES = 10   # ~50k samples
 
 # -----------------------------
-# Dataset Generator (aligned prompt + validated)
+# Dataset Generator
 # -----------------------------
 @app.function(image=common_image, volumes={"/vol": vol}, timeout=600)
 def generate_dataset():
@@ -46,131 +56,168 @@ def generate_dataset():
             lname = random.choice(LAST_NAMES)
             email = f"{fname.lower()}.{lname.lower()}@{random.choice(DOMAINS)}"
             oid = random.choice(ORDER_IDS)
-            text = (
-                f"Text: Customer {cid} {fname} {lname} email {email} order {oid}\n"
-                "Output (valid JSON object only, no text, no explanation, must start with { and end with }):"
-            )
+
+            # Single variant per entry
+            text_variant = f"Customer {cid} {fname} {lname} email {email} order {oid}"
             output = {
                 "customer_id": cid,
                 "first_name": fname,
                 "last_name": lname,
                 "email": email,
-                "order_id": oid
+                "order": oid
             }
-            output_str = json.dumps(output)
-            entry = {"text": text, "Output": output_str}
-            try:
-                json.loads(output_str)  # validate
-                f.write(json.dumps(entry) + "\n")
-            except Exception as e:
-                print("Invalid entry skipped:", e)
+
+            entry = {"text": text_variant, "Output": json.dumps(output)}
+            f.write(json.dumps(entry) + "\n")
+
     print(f"Generated {NUM_ENTRIES} entries → {DATASET_FILE}")
 
-# -----------------------------
-# Training Function (LoRA)
-# -----------------------------
-@app.function(image=common_image, gpu="T4", volumes={"/vol": vol}, timeout=3600)
-def train_model():
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-    base_model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME)
 
-    # Attach LoRA adapters
+# -----------------------------
+# Training Function (QLoRA + Qwen2.5-3B-Instruct + SFTTrainer)
+# -----------------------------
+@app.function(image=common_image, gpu="A10G", volumes={"/vol": vol}, timeout=14400)
+def train_model():
+    MODEL_NAME = "Qwen/Qwen2.5-3B-Instruct"
+
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=False)
+
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_compute_dtype=torch.bfloat16
+    )
+
+    base_model = AutoModelForCausalLM.from_pretrained(
+        MODEL_NAME,
+        device_map="auto",
+        quantization_config=bnb_config,
+        torch_dtype=torch.bfloat16
+    )
+    base_model = prepare_model_for_kbit_training(base_model)
+
     lora_config = LoraConfig(
-        task_type=TaskType.SEQ_2_SEQ_LM,
+        task_type=TaskType.CAUSAL_LM,
         r=16,
         lora_alpha=32,
-        lora_dropout=0.1
+        lora_dropout=0.05,
+        target_modules="all-linear"
     )
     model = get_peft_model(base_model, lora_config)
 
     dataset = load_dataset("json", data_files=DATASET_FILE)["train"]
 
-    def preprocess(batch):
-        inputs = batch["text"]
-        targets = batch["Output"]
-        model_inputs = tokenizer(inputs, padding="max_length", truncation=True)
-        labels = tokenizer(targets, padding="max_length", truncation=True)
-        model_inputs["labels"] = labels["input_ids"]
-        return model_inputs
+    def format_example(example):
+        messages = [
+            {
+                "role": "system",
+                "content": "Extract fields and return ONLY a valid JSON object. Do not explain.Use separate keys 'first_name' and 'last_name'. Do not combine them into 'name'."
+            },
+            {
+                "role": "user",
+                "content": example["text"]
+            },
+            {
+                "role": "assistant",
+                "content": example["Output"]
+            }
+        ]
+        text = tokenizer.apply_chat_template(messages, tokenize=False)
+        return {"text": text + tokenizer.eos_token}
 
-    dataset = dataset.map(preprocess, batched=True)
+    dataset = dataset.map(format_example, remove_columns=dataset.column_names)
 
-    args = Seq2SeqTrainingArguments(
+    training_args = TrainingArguments(
         output_dir=MODEL_DIR,
-        num_train_epochs=3,
-        per_device_train_batch_size=16,
-        learning_rate=5e-4,
+        per_device_train_batch_size=8,   # larger batch
+        gradient_accumulation_steps=2,   # fewer steps
+        num_train_epochs=2,              # fewer epochs
+        learning_rate=2e-4,
+        bf16=True,
+        logging_steps=100,               # less logging
         save_strategy="epoch",
-        predict_with_generate=True,
-        logging_dir="/vol/logs"
+        report_to="none",
+        optim="paged_adamw_32bit"
     )
 
-    trainer = Seq2SeqTrainer(model=model, args=args, train_dataset=dataset)
+
+    trainer = SFTTrainer(
+    model=model,
+    train_dataset=dataset,
+    processing_class=tokenizer,
+    args=training_args
+)
+
     trainer.train()
-    model.save_pretrained(MODEL_DIR)
+    trainer.save_model(MODEL_DIR)
     tokenizer.save_pretrained(MODEL_DIR)
 
 # -----------------------------
 # FastAPI Service
 # -----------------------------
-web_app = FastAPI(
-    title="Extractor Agent API",
-    description="Schema-guided extractor using LoRA fine-tuned Flan-T5",
-    version="1.0.0"
-)
+web_app = FastAPI(title="Qwen Extractor API")
 
 class Input(BaseModel):
     text: str
 
 def safe_parse(result: str):
-    if not result.strip():
-        return {"raw_output": ""}
-    try:
-        return json.loads(result)
-    except:
-        match = re.search(r"\{.*\}", result, re.DOTALL)
-        if match:
-            try:
-                return json.loads(match.group(0))
-            except:
-                pass
+    match = re.search(r"\{.*\}", result, re.DOTALL)
+    if match:
+        try:
+            return json.loads(match.group(0))
+        except:
+            return {"raw_output": match.group(0)}
     return {"raw_output": result}
 
-@web_app.post("/extract", summary="Extract structured JSON from text")
-def extract(inp: Input):
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
-    model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_DIR)
-    model.config.tie_word_embeddings = False
+tokenizer = None
+model = None
 
-    prompt = (
-        f"Text: {inp.text}\n"
-        f"Output (valid JSON object only, no text, no explanation, must start with {{ and end with }}):"
-    )
-    print("PROMPT:")
-    print(prompt)
-
-    inputs = tokenizer(prompt, return_tensors="pt")
-    outputs = model.generate(
-        **inputs,
-        max_new_tokens=128,
-        num_beams=4,
-        do_sample=False
-        # forced_bos_token_id=tokenizer.convert_tokens_to_ids("{"),
-        # eos_token_id=tokenizer.convert_tokens_to_ids("}")
-    )
-
-    result = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    print("MODEL OUTPUT:")
-    print(result)
-    result="{"+result+"}" 
-
-    parsed = safe_parse(result)
-    return {"extracted": parsed}
-
-# -----------------------------
-# Modal Deployment
-# -----------------------------
-@app.function(image=common_image, gpu="T4", volumes={"/vol": vol})
+@app.function(image=common_image, gpu="A10G", volumes={"/vol": vol}, timeout=3600)
 @modal.asgi_app()
 def fastapi_app():
+    global tokenizer, model
+    if tokenizer is None or model is None:
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR, use_fast=False)
+        base_model = AutoModelForCausalLM.from_pretrained(
+            "Qwen/Qwen2.5-3B-Instruct",
+            torch_dtype=torch.bfloat16,
+            device_map="auto"
+        )
+        model = PeftModel.from_pretrained(base_model, MODEL_DIR)
     return web_app
+
+@web_app.post("/extract")
+def extract(inp: Input):
+    messages = [
+        {
+            "role": "system",
+            "content": "Return ONLY a valid JSON object. No explanations. No markdown."
+        },
+        {
+            "role": "user",
+            "content": inp.text
+        }
+    ]
+
+    prompt = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True
+    )
+
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+    outputs = model.generate(
+        **inputs,
+        max_new_tokens=64,
+        do_sample=False,
+        temperature=0.0,
+        eos_token_id=tokenizer.eos_token_id,
+        pad_token_id=tokenizer.eos_token_id
+    )
+
+    generated = outputs[0][inputs.input_ids.shape[1]:]
+    result = tokenizer.decode(generated, skip_special_tokens=True).strip()
+    parsed = safe_parse(result)
+    print(result)
+    return {"extracted": parsed}
