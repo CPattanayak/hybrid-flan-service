@@ -81,6 +81,10 @@ def train_model():
     MODEL_NAME = "Qwen/Qwen2.5-3B-Instruct"
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=False)
+    #-----------------------------------------------
+    #Convert text into tokens.
+    # Example:John Smith becomes [1234, 5678]
+    # -----------------------------------------------
 
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
@@ -88,6 +92,12 @@ def train_model():
         bnb_4bit_use_double_quant=True,
         bnb_4bit_compute_dtype=torch.bfloat16
     )
+    # ---------------------------------------------
+    #  Without quantization:
+    #  3B Model ≈ 12GB+
+    # With 4-bit quantization:
+    #  3B Model ≈ 3GB
+    # ---------------------------------------------
 
     base_model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
@@ -95,7 +105,31 @@ def train_model():
         quantization_config=bnb_config,
         torch_dtype=torch.bfloat16
     )
+    #----------------------------------------------
+    # Loads original Qwen model.
+    # Think: 
+    # Pretrained Brain
+
+    # Already knows:
+
+    # English
+    # Reasoning
+    # Coding
+    # Instructions
+
+    # We only teach:
+
+    # Field Extraction
+    # ----------------------------------------------
     base_model = prepare_model_for_kbit_training(base_model)
+    # ------------------------------------------------------
+    #  Makes quantized model trainable.
+
+    # Without this:
+
+    # Gradient issues
+    # Training instability
+    # ------------------------------------------------------
 
     lora_config = LoraConfig(
         task_type=TaskType.CAUSAL_LM,
@@ -104,7 +138,41 @@ def train_model():
         lora_dropout=0.05,
         target_modules="all-linear"
     )
+    # -----------------------------------------------------
+    # .
+
+    # Traditional Fine Tuning:
+
+    # Train all 3 Billion parameters
+
+    # Huge cost.
+
+    # LoRA:
+
+    # Freeze original model
+    # Train only small adapters
+
+    # Example:
+
+    # 3 Billion Parameters
+
+    # Train only
+    # 5-20 Million Parameters
+
+    # Benefits:
+
+    # Cheap
+    # Fast
+    # Small model files-
+    # -----------------------------------------------------
     model = get_peft_model(base_model, lora_config)
+    #  Adds trainable adapters.
+
+    # Architecture:
+
+    # Original Model
+    #      +
+    # LoRA Layers
 
     dataset = load_dataset("json", data_files=DATASET_FILE)["train"]
 
@@ -124,6 +192,20 @@ def train_model():
             }
         ]
         text = tokenizer.apply_chat_template(messages, tokenize=False)
+        #         Creates official Qwen format.
+
+        # Example:
+
+        # <|system|>
+        # Extract fields
+
+        # <|user|>
+        # Customer C100...
+
+        # <|assistant|>
+        # {
+        #  ...
+        # }
         return {"text": text + tokenizer.eos_token}
 
     dataset = dataset.map(format_example, remove_columns=dataset.column_names)
