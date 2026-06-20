@@ -21,7 +21,7 @@ This repository provides working examples for all three.
 
 ## Architecture
 
-![Architecture](docs/ModelTraining.png)
+![Architecture](docs/ModelTraing.png)
 
 ## Encoder Training (DistilBERT)
 
