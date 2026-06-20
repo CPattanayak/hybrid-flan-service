@@ -21,11 +21,11 @@ This repository provides working examples for all three.
 
 ## Architecture
 
-![Architecture](docs/architecture.png)
+![Architecture](docs/ModelTraining.png)
 
 ## Encoder Training (DistilBERT)
 
-![Encoder](docs/encoder-training.png)
+![Encoder](docs/Encoder.png)
 
 ### Use Cases
 
@@ -35,7 +35,7 @@ This repository provides working examples for all three.
 
 ## Encoder-Decoder Training (FLAN-T5)
 
-![Encoder Decoder](docs/encoder-decoder-training.png)
+![Encoder Decoder](docs/Encoder-decoder.png)
 
 ### Use Cases
 
@@ -45,7 +45,7 @@ This repository provides working examples for all three.
 
 ## Decoder Only Training (Qwen)
 
-![Decoder Only](docs/decoder-only-training.png)
+![Decoder Only](docs/decoder.png)
 
 ### Use Cases
 
