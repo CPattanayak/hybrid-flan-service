@@ -79,6 +79,8 @@ Context Representation
 ---
 
 ## Decoder Only Model - Information Extraction
+### Architecture
+![Encoder flow](docs/decoder.png)
 
 ### Model
 - Qwen 2.5 3B Instruct
