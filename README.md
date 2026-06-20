@@ -9,7 +9,7 @@ This repository demonstrates how different transformer architectures are trained
 
 ## Architecture Overview
 
-![Architecture of models](docs/images/architecture.png)
+![Architecture of models](docs/Models.png)
 
 | Architecture | Model | Use Case |
 |-------------|---------|----------|
