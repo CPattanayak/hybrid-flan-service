@@ -50,6 +50,9 @@ Intent Prediction
 
 ## Encoder-Decoder Model - Text to SQL
 
+### Architecture
+![Encoder flow](docs/EncoderEncoder-decoder.png)
+
 ### Model
 - FLAN-T5
 - LoRA Fine Tuning
