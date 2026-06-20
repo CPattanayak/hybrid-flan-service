@@ -21,6 +21,8 @@ This repository demonstrates how different transformer architectures are trained
 ---
 
 ## Encoder Model - Intent Classification
+### Architecture
+![Encoder flow](docs/Encoder.png)
 
 ### Model
 - DistilBERT
