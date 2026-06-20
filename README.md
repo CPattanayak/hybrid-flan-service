@@ -62,6 +62,21 @@ This repository provides working examples for all three.
 - TRL
 - Modal
 - FastAPI
+## Source Code
+
+### Encoder Model - DistilBERT Intent Classification
+
+- [modal_app_hybrid.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/modal_app_hybrid.py)
+
+### Encoder-Decoder Model - FLAN-T5 Text-to-SQL
+
+- [ext_agent.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/ext_agent.py)
+
+### Decoder-Only Model - Qwen 2.5 Information Extraction
+
+- [sql_agent.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/sql_agent.py)
+
+---
 
 ## Training
 
