@@ -4,11 +4,12 @@ A practical implementation of multiple AI model training architectures using Hug
 
 This repository demonstrates how different transformer architectures are trained and deployed for real-world applications such as Intent Classification, Text-to-SQL Generation, and Information Extraction.
 
+
 ---
 
 ## Architecture Overview
 
-![Architecture Diagram](docs/images/architecture.png)
+![Architecture of models](docs/images/architecture.png)
 
 | Architecture | Model | Use Case |
 |-------------|---------|----------|
@@ -118,89 +119,3 @@ Generated JSON
 
 - Python
 
----
-
-## Project Structure
-
-```text
-hybrid-flan-service/
-│
-├── modal_app_hybrid.py
-├── ext_agent.py
-├── sql_agent.py
-├── docs/
-│   └── images/
-│
-├── requirements.txt
-└── README.md
-```
-
----
-
-## Installation
-
-```bash
-git clone https://github.com/CPattanayak/hybrid-flan-service.git
-
-cd hybrid-flan-service
-
-pip install -r requirements.txt
-```
-
----
-
-## Training
-
-### Train Intent Classifier
-
-```bash
-modal run modal_app_hybrid.py
-```
-
-### Train Text To SQL Model
-
-```bash
-modal run ext_agent.py
-```
-
-### Train Qwen Extractor
-
-```bash
-modal run sql_agent.py
-```
-
----
-
-## Concepts Demonstrated
-
-- Transformer Architectures
-- Encoder Models
-- Encoder Decoder Models
-- Decoder Only Models
-- LoRA Fine Tuning
-- QLoRA Fine Tuning
-- Quantization
-- Instruction Tuning
-- Production Deployment
-
----
-
-## Future Enhancements
-
-- RAG Integration
-- Vector Database Support
-- LangGraph Workflows
-- Agentic AI
-- Model Evaluation
-- MLOps Pipelines
-
----
-
-## Author
-
-**Chandan Pattanayak**
-
-Senior Principal Engineer | AI Platform Architect
-
-- GitHub: https://github.com/CPattanayak
-- LinkedIn: https://linkedin.com/in/YOUR_PROFILE
