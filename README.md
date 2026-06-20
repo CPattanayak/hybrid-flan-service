@@ -45,7 +45,7 @@ This repository provides working examples for all three.
 
 ## Decoder Only Training (Qwen)
 
-![Decoder Only](docs/decoder.png)
+![Decoder Only](docs/decode.png)
 
 ### Use Cases
 
