@@ -51,7 +51,7 @@ Intent Prediction
 ## Encoder-Decoder Model - Text to SQL
 
 ### Architecture
-![Encoder flow](docs/EncoderEncoder-decoder.png)
+![Encoder-Decoder flow](docs/Encoder-decoder.png)
 
 ### Model
 - FLAN-T5
@@ -80,7 +80,7 @@ Context Representation
 
 ## Decoder Only Model - Information Extraction
 ### Architecture
-![Encoder flow](docs/decoder.png)
+![Decoder flow](docs/decode.png)
 
 ### Model
 - Qwen 2.5 3B Instruct
