@@ -70,11 +70,11 @@ This repository provides working examples for all three.
 
 ### Encoder-Decoder Model - FLAN-T5 Text-to-SQL
 
-- [ext_agent.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/ext_agent.py)
+- [sql_agent.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/sql_agent.py)
 
 ### Decoder-Only Model - Qwen 2.5 Information Extraction
 
-- [sql_agent.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/sql_agent.py)
+- [ext_agent.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/ext_agent.py)
 
 ---
 
