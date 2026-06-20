@@ -1,129 +1,78 @@
 # Hybrid AI Training Platform
 
-A practical implementation of multiple AI model training architectures using Hugging Face, LoRA, QLoRA, Modal, and FastAPI.
-
-This repository demonstrates how different transformer architectures are trained and deployed for real-world applications such as Intent Classification, Text-to-SQL Generation, and Information Extraction.
-
-
----
-
-## Architecture Overview
-
-![Type of models](docs/Models.png)
-![Model Training process](docs/ModelTraing.png)
+This repository demonstrates practical fine-tuning patterns for three major transformer architectures:
 
 | Architecture | Model | Use Case |
-|-------------|---------|----------|
+|--------------|--------|----------|
 | Encoder | DistilBERT | Intent Classification |
-| Encoder-Decoder | FLAN-T5 | Text-to-SQL Generation |
-| Decoder Only | Qwen 2.5 | Information Extraction |
+| Encoder-Decoder | FLAN-T5 | Text-to-SQL |
+| Decoder-Only | Qwen 2.5 | Information Extraction |
 
----
+## Why This Repository?
 
-## Encoder Model - Intent Classification
-### Architecture
-![Encoder flow](docs/Encoder.png)
+Many engineers learn how to call LLM APIs but never understand:
 
-### Model
-- DistilBERT
-- Hugging Face Trainer
+- How encoder models are trained
+- How sequence-to-sequence models work
+- How decoder-only LLMs are fine-tuned
+- When to use LoRA vs QLoRA
 
-### Training Flow
+This repository provides working examples for all three.
 
-```text
-Input Text
-    ↓
-Tokenization
-    ↓
-DistilBERT Encoder
-    ↓
-Classification Head
-    ↓
-Intent Prediction
-```
+## Architecture
 
-### Source Code
+![Architecture](docs/architecture.png)
 
-- [modal_app_hybrid.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/modal_app_hybrid.py)
+## Encoder Training (DistilBERT)
 
----
+![Encoder](docs/encoder-training.png)
 
-## Encoder-Decoder Model - Text to SQL
+### Use Cases
 
-### Architecture
-![Encoder-Decoder flow](docs/Encoder-decoder.png)
+- Intent Classification
+- Text Classification
+- Document Categorization
 
-### Model
-- FLAN-T5
-- LoRA Fine Tuning
-- Seq2SeqTrainer
+## Encoder-Decoder Training (FLAN-T5)
 
-### Training Flow
+![Encoder Decoder](docs/encoder-decoder-training.png)
 
-```text
-Natural Language
-        ↓
-     Encoder
-        ↓
-Context Representation
-        ↓
-     Decoder
-        ↓
-     SQL Query
-```
+### Use Cases
 
-### Source Code
+- Text-to-SQL
+- Translation
+- Summarization
 
-- [ext_agent.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/ext_agent.py)
+## Decoder Only Training (Qwen)
 
----
+![Decoder Only](docs/decoder-only-training.png)
 
-## Decoder Only Model - Information Extraction
-### Architecture
-![Decoder flow](docs/decode.png)
+### Use Cases
 
-### Model
-- Qwen 2.5 3B Instruct
-- QLoRA
-- SFTTrainer
+- Information Extraction
+- Chat Applications
+- JSON Generation
 
-### Training Flow
+## Technologies
 
-```text
-Prompt
-   ↓
-Qwen Decoder
-   ↓
-LoRA Adapters
-   ↓
-Generated JSON
-```
-
-### Source Code
-
-- [sql_agent.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/sql_agent.py)
-
----
-
-## Technology Stack
-
-### AI / ML
-
-- Hugging Face Transformers
-- Datasets
+- Hugging Face
 - PEFT
 - LoRA
 - QLoRA
 - TRL
-- BitsAndBytes
-
-### Deployment
-
 - Modal
 - FastAPI
-- Uvicorn
 
-### Language
+## Training
 
-- Python
+```bash
+modal run modal_app_hybrid.py
+modal run ext_agent.py
+modal run sql_agent.py
+```
 
+## Author
+
+Chandan Pattanayak
+
+Senior Principal Engineer 
