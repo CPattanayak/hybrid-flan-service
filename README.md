@@ -18,6 +18,8 @@ Many engineers learn how to call LLM APIs but never understand:
 - When to use LoRA vs QLoRA
 
 This repository provides working examples for all three.
+## Model Types
+![Model Types](docs/Models.png)
 
 ## Architecture
 
