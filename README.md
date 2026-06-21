@@ -20,6 +20,8 @@ Many engineers learn how to call LLM APIs but never understand:
 This repository provides working examples for all three.
 ## Model Types
 ![Model Types](docs/Models.png)
+## Training Technique
+![Training](docs/Training.png)
 
 ## Architecture
 
