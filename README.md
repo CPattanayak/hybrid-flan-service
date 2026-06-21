@@ -80,6 +80,12 @@ This repository provides working examples for all three.
 
 - [ext_agent.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/ext_agent.py)
 
+### Decoder-Only Model - Qwen 2.5 Information Extraction using templete from DB
+
+- [seed_taining_data.py](https://github.com/CPattanayak/hybrid-flan-service/blob/main/seeed_training_data.py)
+- [main.py] (https://github.com/CPattanayak/hybrid-flan-service/blob/main/main.py)
+
+
 ---
 
 ## Training
